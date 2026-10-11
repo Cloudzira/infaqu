@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InfaQu - Transparansi Infaq Digital</title>
+  <title>InfaQu - Sistem Manajemen & Transparansi Infaq Digital</title>
 
-  <!-- Favicon SVG InfaQu -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 8 C30 8 20 28 20 40 C20 62 50 88 50 88 C50 88 80 62 80 40 C80 28 70 8 50 8 Z' fill='none' stroke='%2310b981' stroke-width='6'/><path d='M50 15 C38 25 35 35 35 45 C35 55 42 62 50 70 C58 62 65 55 65 45 C65 35 62 25 50 15 Z' fill='%2310b981' opacity='0.25'/><circle cx='50' cy='32' r='8' fill='%2306b6d4'/><path d='M44 48 C44 44 56 44 56 48 L56 52 C56 56 44 56 44 52 Z' fill='%23f59e0b'/></svg>">
+  <link rel="icon" href="favicon.png">
   
-  <!-- 1. Eksternal Library (Supabase, SheetJS, SweetAlert2, Google Fonts, FontAwesome & Lucide Icons) -->
+  <!-- 1. Eksternal Library (Supabase, SheetJS, SweetAlert2, Google Fonts & Lucide Icons) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -16,9 +15,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- 2. STYLING (CSS) DENGAN DUA TEMA + SPLASH SCREEN -->
+  <!-- 2. STYLING (CSS) DENGAN DUA TEMA -->
   <style>
     /* ================= TEMA 1: DEFAULT (DARK COSMIC / EMERALD) ================= */
     :root, [data-theme="default"] {
@@ -29,7 +27,7 @@
       --accent-violet: #8b5cf6;
       --glass-bg: rgba(255, 255, 255, 0.03);
       --glass-border: rgba(255, 255, 255, 0.08);
-      --glass-card: rgba(15, 23, 42, 0.75);
+      --glass-card: rgba(15, 23, 42, 0.65);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --orb-1: #4f46e5;
@@ -44,19 +42,18 @@
       --swal-bg: rgba(15, 23, 42, 0.85);
       --swal-border: rgba(255, 255, 255, 0.1);
       --swal-text: #f8fafc;
-      --logo-glow: rgba(16, 185, 129, 0.4);
     }
 
     /* ================= TEMA 2: FEMININE / PINK LIGHT GLASSMORPHISM ================= */
     [data-theme="feminine"] {
       --bg-gradient: radial-gradient(circle at 50% 0%, #ffe4e6 0%, #fce7f3 50%, #fdf2f8 100%);
-      --accent-emerald: #db2777;
+      --accent-emerald: #db2777; 
       --accent-cyan: #e11d48;
       --accent-indigo: #c084fc;
       --accent-violet: #a855f7;
       --glass-bg: rgba(255, 255, 255, 0.6);
       --glass-border: rgba(244, 114, 182, 0.25);
-      --glass-card: rgba(255, 255, 255, 0.8);
+      --glass-card: rgba(255, 255, 255, 0.75);
       --text-main: #4c0519;
       --text-muted: #881337;
       --orb-1: #f472b6;
@@ -71,7 +68,6 @@
       --swal-bg: rgba(255, 255, 255, 0.95);
       --swal-border: rgba(244, 114, 182, 0.3);
       --swal-text: #4c0519;
-      --logo-glow: rgba(219, 39, 119, 0.35);
     }
 
     * {
@@ -95,128 +91,6 @@
       transition: background 0.5s ease, color 0.5s ease;
     }
 
-    /* ================= SPLASH SCREEN STYLES ================= */
-    #splash-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: var(--bg-gradient);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 40px 20px;
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s ease;
-    }
-
-    #splash-screen.hide-splash {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .splash-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      margin: auto 0;
-      max-width: 480px;
-      width: 100%;
-    }
-
-    .splash-logo-wrapper {
-      position: relative;
-      width: 110px;
-      height: 110px;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .splash-logo-svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 0 25px var(--logo-glow));
-      animation: pulseGlow 3s infinite ease-in-out;
-    }
-
-    @keyframes pulseGlow {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--logo-glow)); }
-      50% { transform: scale(1.06); filter: drop-shadow(0 0 35px var(--logo-glow)); }
-    }
-
-    .splash-title {
-      font-size: 36px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      background: linear-gradient(135deg, #ffffff 0%, var(--accent-cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 6px;
-    }
-    [data-theme="feminine"] .splash-title {
-      background: linear-gradient(135deg, #4c0519 0%, #db2777 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .splash-subtitle {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-      font-weight: 500;
-    }
-
-    .splash-progress-container {
-      width: 100%;
-      max-width: 280px;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      border: 1px solid var(--glass-border);
-    }
-
-    .splash-progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent-emerald) 0%, var(--accent-cyan) 100%);
-      border-radius: 20px;
-      transition: width 0.1s linear;
-    }
-
-    .btn-skip-splash {
-      background: var(--glass-card);
-      border: 1px solid var(--glass-border);
-      color: var(--text-main);
-      padding: 10px 22px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-skip-splash:hover {
-      border-color: var(--accent-emerald);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    }
-
-    /* ORB GLOW BACKGROUND */
     .glow-orb {
       position: fixed;
       border-radius: 50%;
@@ -229,12 +103,73 @@
     .glow-orb-1 { width: 400px; height: 400px; background: var(--orb-1); top: -100px; left: -100px; }
     .glow-orb-2 { width: 350px; height: 350px; background: var(--orb-2); bottom: -100px; right: -100px; }
 
+    /* ================= SPLASH SCREEN STYLES ================= */
+    #splash-screen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--bg-gradient);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+      padding: 20px;
+    }
+    .splash-content {
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      animation: fadeIn 0.8s ease-out;
+    }
+    .islamic-logo-container {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 20px auto;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(245, 158, 11, 0.2));
+      border: 2px solid var(--accent-emerald);
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .splash-progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin-top: 24px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+    }
+    .splash-progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #f59e0b);
+      border-radius: 10px;
+      transition: width 0.1s linear;
+    }
+
     .container {
       width: 100%;
       max-width: 520px;
       position: relative;
       z-index: 10;
       margin-bottom: 20px;
+    }
+
+    .page-footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      opacity: 0.8;
+      letter-spacing: 0.5px;
+      margin-top: 10px;
     }
 
     .top-action-bar {
@@ -250,7 +185,7 @@
     .theme-switch-pill {
       background: var(--glass-card);
       border: 1px solid var(--glass-border);
-      padding: 4px;
+      padding: 3px;
       border-radius: 30px;
       display: flex;
       align-items: center;
@@ -263,8 +198,8 @@
       border-color: var(--accent-emerald);
     }
     .theme-option {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
@@ -278,7 +213,7 @@
       background: var(--btn-primary-bg);
       color: #ffffff;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
 
     .brand-header {
@@ -286,20 +221,23 @@
       margin-bottom: 28px;
       position: relative;
     }
-
-    .brand-logo-container {
+    .brand-logo {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 72px;
-      height: 72px;
-      background: var(--glass-card);
-      border: 1px solid var(--glass-border);
-      border-radius: 22px;
-      margin-bottom: 14px;
-      box-shadow: 0 0 30px var(--logo-glow);
-      backdrop-filter: blur(15px);
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(245, 158, 11, 0.2));
+      border: 1.5px solid var(--accent-emerald);
+      border-radius: 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+      color: var(--accent-emerald);
       transition: all 0.3s ease;
+    }
+    [data-theme="feminine"] .brand-logo {
+      background: linear-gradient(135deg, rgba(219, 39, 119, 0.15), rgba(244, 63, 94, 0.15));
+      box-shadow: 0 0 25px rgba(219, 39, 119, 0.2);
     }
 
     .main-title {
@@ -457,7 +395,7 @@
     select option { background: var(--select-bg-color); color: var(--select-text-color); }
     input:focus, select:focus {
       border-color: var(--accent-emerald);
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+      box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.15);
       background: var(--glass-card);
     }
 
@@ -592,7 +530,7 @@
     th { position: sticky; top: 0; background: var(--table-header-bg) !important; padding: 10px 12px; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--glass-border); text-transform: uppercase; font-size: 11px; }
     td { padding: 10px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-main); vertical-align: middle; }
 
-    .code-box { background: rgba(219, 39, 119, 0.08); border: 1px dashed var(--accent-emerald); padding: 18px; border-radius: 16px; text-align: center; color: var(--accent-emerald); margin-top: 16px; }
+    .code-box { background: rgba(219, 39, 119, 0.08); border: 1.5px dashed var(--accent-emerald); padding: 18px; border-radius: 16px; text-align: center; color: var(--accent-emerald); margin-top: 16px; }
 
     .colored-toast.swal2-popup {
       background: var(--swal-bg) !important;
@@ -615,128 +553,69 @@
       opacity: 0.9 !important;
       transform: translateY(-1px) !important;
     }
-
-    /* FOOTER & GLASS PANEL STYLES */
-    .glass-panel {
-      background: var(--glass-card);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-    }
-    
-    .kurnia-icon {
-      width: 2.2rem;
-      height: 2.2rem;
-      border-radius: 9999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-    .kurnia-icon.ig:hover { color: #00f2fe; border-color: rgba(0, 242, 254, 0.6); box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); transform: translateY(-2px); }
-    .kurnia-icon.tt:hover { color: #bd00ff; border-color: rgba(189, 0, 255, 0.6); box-shadow: 0 0 15px rgba(189, 0, 255, 0.4); transform: translateY(-2px); }
-    .kurnia-icon.yt:hover { color: #ff007f; border-color: rgba(255, 0, 127, 0.6); box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); transform: translateY(-2px); }
-    .kurnia-icon.wa:hover { color: #00ff87; border-color: rgba(0, 255, 135, 0.6); box-shadow: 0 0 15px rgba(0, 255, 135, 0.4); transform: translateY(-2px); }
-
-    .app-footer {
-      width: 100%;
-      padding: 20px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      position: relative;
-      z-index: 10;
-    }
   </style>
+
+<!-- Font Awesome untuk Ikon sosmed -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- CSS Footer & Glassmorphism -->
+<style>
+    .glass-panel {
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    .kurnia-icon {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #cbd5e1;
+        font-size: 0.75rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+    .kurnia-icon.ig:hover { color: #00f2fe; border-color: rgba(0, 242, 254, 0.6); }
+    .kurnia-icon.tt:hover { color: #bd00ff; border-color: rgba(189, 0, 255, 0.6); }
+    .kurnia-icon.yt:hover { color: #ff007f; border-color: rgba(255, 0, 127, 0.6); }
+    .kurnia-icon.wa:hover { color: #00ff87; border-color: rgba(0, 255, 135, 0.6); }
+</style>
 </head>
 <body data-theme="default">
 
-  <!-- ================= SPLASH SCREEN MODERN ================= -->
+  <!-- SPLASH SCREEN DENGAN LOGO ISLAMI JELAS & PROGRESS BAR -->
   <div id="splash-screen">
-    <div></div> <!-- Spacer Top -->
-    
     <div class="splash-content">
-      <div class="splash-logo-wrapper">
-        <!-- SVG Logo Islami Modern InfaQu (Masjid + Heart + Coins) -->
-        <svg class="splash-logo-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="gradEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#10b981" />
-              <stop offset="100%" stop-color="#06b6d4" />
-            </linearGradient>
-            <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#fbbf24" />
-              <stop offset="100%" stop-color="#d97706" />
-            </linearGradient>
-            <linearGradient id="gradHeart" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#f43f5e" />
-              <stop offset="100%" stop-color="#be185d" />
-            </linearGradient>
-          </defs>
-
-          <!-- Outer Glow Circle Ring -->
-          <circle cx="60" cy="60" r="54" fill="none" stroke="url(#gradEmerald)" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
-          
-          <!-- Modern Islamic Dome Silhouette -->
-          <path d="M 60 18 Q 45 35 30 52 L 90 52 Q 75 35 60 18 Z" fill="url(#gradEmerald)" opacity="0.85"/>
-          <path d="M 60 12 L 60 20 M 57 15 L 63 15" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
-
-          <!-- Heart Shape (Giving/Infaq symbol) -->
-          <path d="M 60 92 C 35 75 25 58 35 44 C 43 33 55 40 60 48 C 65 40 77 33 85 44 C 95 58 85 75 60 92 Z" fill="url(#gradHeart)" opacity="0.2"/>
-          <path d="M 60 92 C 35 75 25 58 35 44 C 43 33 55 40 60 48 C 65 40 77 33 85 44 C 95 58 85 75 60 92 Z" fill="none" stroke="url(#gradEmerald)" stroke-width="3" stroke-linejoin="round"/>
-
-          <!-- Infaq Coin Falling into Heart -->
-          <circle cx="60" cy="56" r="10" fill="url(#gradGold)" stroke="#ffffff" stroke-width="1.5"/>
-          <text x="60" y="60" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="800" fill="#ffffff" text-anchor="middle">Rp</text>
+      <div class="islamic-logo-container">
+        <!-- Logo SVG Kubah Masjid & Bulan Sabit Islam -->
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v4"></path>
+          <path d="M12 2a3 3 0 0 0-3 3"></path>
+          <path d="M3 21h18"></path>
+          <path d="M5 21v-7a7 7 0 0 1 14 0v7"></path>
+          <path d="M12 11v3"></path>
+          <path d="M10.5 12.5h3"></path>
         </svg>
       </div>
-
-      <h1 class="splash-title">INFAQU</h1>
-      <p class="splash-subtitle">Sistem Manajemen & Transparansi Infaq Digital</p>
-
-      <div class="splash-progress-container">
-        <div id="splash-progress-bar" class="splash-progress-bar"></div>
+      <h1 style="font-size: 26px; font-weight: 800; color: var(--text-main); letter-spacing: 1px; margin-bottom: 6px;">INFAQU</h1>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px;">Sistem Manajemen & Transparansi Infaq Digital</p>
+      
+      <div class="splash-progress-track">
+        <div id="splash-bar" class="splash-progress-bar"></div>
       </div>
-
-      <button class="btn-skip-splash" onclick="dismissSplashScreen()">
-        <span>Masuk Aplikasi</span>
-        <i data-lucide="arrow-right" size="14"></i>
-      </button>
-    </div>
-
-    <!-- Splash Screen Footer -->
-    <div class="app-footer">
-      <div class="social-media-row" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-        <a href="https://instagram.com/kurniapedia" target="_blank" class="glass-panel kurnia-icon ig" title="Instagram">
-          <i class="fa-brands fa-instagram"></i>
-        </a>
-        <a href="https://tiktok.com/@kurniapedia" target="_blank" class="glass-panel kurnia-icon tt" title="TikTok">
-          <i class="fa-brands fa-tiktok"></i>
-        </a>
-        <a href="https://www.youtube.com/@kurniapedia" target="_blank" class="glass-panel kurnia-icon yt" title="YouTube">
-          <i class="fa-brands fa-youtube"></i>
-        </a>
-        <a href="https://wa.me/+6285870906050" target="_blank" class="glass-panel kurnia-icon wa" title="WhatsApp">
-          <i class="fa-brands fa-whatsapp"></i>
-        </a>
-      </div>
-      <p style="text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 500;">
-        Crafted with ♥ by <span style="color: var(--accent-cyan); font-weight: 700;">Kurniapedia</span> © 2026
-      </p>
+      <p id="splash-status" style="font-size: 11px; color: var(--text-muted); margin-top: 10px;">Memuat aplikasi...</p>
+      
+      <button onclick="dismissSplashScreen()" class="btn-primary" style="margin-top: 20px; font-size: 13px; padding: 10px;">Masuk Aplikasi Sekarang</button>
     </div>
   </div>
 
-  <!-- BACKGROUND GLOW ORBS -->
   <div class="glow-orb glow-orb-1"></div>
   <div class="glow-orb glow-orb-2"></div>
 
-  <!-- MAIN APP CONTAINER -->
   <div class="container">
 
     <div class="brand-header">
@@ -747,16 +626,15 @@
         </div>
       </div>
 
-      <!-- Main Logo SVG InfaQu -->
-      <div class="brand-logo-container">
-        <svg width="42" height="42" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <path d="M 60 18 Q 45 35 30 52 L 90 52 Q 75 35 60 18 Z" fill="var(--accent-emerald)"/>
-          <path d="M 60 92 C 35 75 25 58 35 44 C 43 33 55 40 60 48 C 65 40 77 33 85 44 C 95 58 85 75 60 92 Z" fill="none" stroke="var(--accent-emerald)" stroke-width="4"/>
-          <circle cx="60" cy="56" r="10" fill="#fbbf24"/>
-          <text x="60" y="60" font-size="10" font-weight="800" fill="#ffffff" text-anchor="middle">Rp</text>
+      <div class="brand-logo">
+        <!-- Logo Kubah Masjid SVG -->
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v3"></path>
+          <path d="M3 21h18"></path>
+          <path d="M5 21v-7a7 7 0 0 1 14 0v7"></path>
+          <path d="M9 10h6"></path>
         </svg>
       </div>
-
       <h1 class="main-title">INFAQU</h1>
       <p class="main-subtitle">Sistem Manajemen & Transparansi Infaq Digital</p>
     </div>
@@ -855,7 +733,6 @@
         </div>
       </div>
 
-      <!-- INFAQ ANGGOTA GRUP HARI INI -->
       <div class="stat-card" style="margin-bottom: 12px; background: rgba(16, 185, 129, 0.08); border-color: var(--accent-emerald);">
         <span class="stat-label" style="color: var(--accent-emerald);">Infaq Grup Hari Ini</span>
         <div class="stat-value" style="color: var(--accent-emerald);">Rp <span id="dash-a-today">0</span></div>
@@ -1055,32 +932,47 @@
 
   </div>
 
-  <!-- MAIN APPLICATION FOOTER -->
-  <div class="app-footer">
-    <div class="social-media-row" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-      <a href="https://instagram.com/kurniapedia" target="_blank" class="glass-panel kurnia-icon ig" title="Instagram">
-        <i class="fa-brands fa-instagram"></i>
-      </a>
-      <a href="https://tiktok.com/@kurniapedia" target="_blank" class="glass-panel kurnia-icon tt" title="TikTok">
-        <i class="fa-brands fa-tiktok"></i>
-      </a>
-      <a href="https://www.youtube.com/@kurniapedia" target="_blank" class="glass-panel kurnia-icon yt" title="YouTube">
-        <i class="fa-brands fa-youtube"></i>
-      </a>
-      <a href="https://wa.me/+6285870906050" target="_blank" class="glass-panel kurnia-icon wa" title="WhatsApp">
-        <i class="fa-brands fa-whatsapp"></i>
-      </a>
+  <!-- Footer & Media Sosial -->
+  <div style="width: 100%; padding: 24px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+    <div id="socialMediaRow" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <a href="https://instagram.com/kurniapedia" target="_blank" class="glass-panel kurnia-icon ig"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://tiktok.com/@kurniapedia" target="_blank" class="glass-panel kurnia-icon tt"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://www.youtube.com/@kurniapedia" target="_blank" class="glass-panel kurnia-icon yt"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://wa.me/+6285870906050" target="_blank" class="glass-panel kurnia-icon wa"><i class="fa-brands fa-whatsapp"></i></a>
     </div>
-    <p style="text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 500;">
-      Crafted with ♥ by <span style="color: var(--accent-cyan); font-weight: 700;">Kurniapedia</span> © 2026
-    </p>
+    <footer style="text-align: center; font-size: 11px; color: var(--text-muted); font-family: sans-serif;">
+        <p>Crafted with ♥ by <span style="color: var(--accent-emerald); font-weight: 600;">Kurniapedia</span> 2026</p>      
+    </footer>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 
-  <!-- 3. SCRIPT (LOGIKA APLIKASI + SPLASH SCREEN + SUPABASE) -->
+  <!-- 3. SCRIPT (LOGIKA APLIKASI + SPLASH SCREEN HANDLER) -->
   <script>
     lucide.createIcons();
+
+    // Logika Splash Screen Otomatis
+    let splashProgress = 0;
+    const splashBar = document.getElementById('splash-bar');
+    const splashScreen = document.getElementById('splash-screen');
+
+    const splashInterval = setInterval(() => {
+      splashProgress += 2;
+      if (splashBar) splashBar.style.width = splashProgress + '%';
+      if (splashProgress >= 100) {
+        clearInterval(splashInterval);
+        dismissSplashScreen();
+      }
+    }, 30);
+
+    function dismissSplashScreen() {
+      if (splashScreen) {
+        splashScreen.style.opacity = '0';
+        setTimeout(() => {
+          splashScreen.style.display = 'none';
+        }, 600);
+      }
+    }
 
     const SUPABASE_URL = "https://oouzppxbakkiwwttkbet.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vdXpwcHhiYWtraXd3dHRrYmV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwNDc4NDAsImV4cCI6MjEwNDYyMzg0MH0.RkUC2MYGFTgcrXzNrHZCMj-ch9Bg-TFWEiGvf1fWD40";
@@ -1089,34 +981,6 @@
     let currMember = null;
     let currAdmin = null;
 
-    // --- SPLASH SCREEN LOGIC & ANIMATION ---
-    let splashProgress = 0;
-    let splashInterval = null;
-
-    function startSplashScreen() {
-      const progressBar = document.getElementById('splash-progress-bar');
-      splashInterval = setInterval(() => {
-        splashProgress += 2.5;
-        if (progressBar) progressBar.style.width = splashProgress + '%';
-
-        if (splashProgress >= 100) {
-          clearInterval(splashInterval);
-          setTimeout(() => {
-            dismissSplashScreen();
-          }, 200);
-        }
-      }, 50);
-    }
-
-    function dismissSplashScreen() {
-      if (splashInterval) clearInterval(splashInterval);
-      const splashElem = document.getElementById('splash-screen');
-      if (splashElem) {
-        splashElem.classList.add('hide-splash');
-      }
-    }
-
-    // --- AUTO CLEANUP FUNCTION (1 TAHUN INAKTIF) ---
     async function runAutoCleanup() {
       try {
         const oneYearAgo = new Date();
@@ -1172,21 +1036,18 @@
             
             <div style="margin-bottom: 12px; background: rgba(16, 185, 129, 0.08); padding: 10px 12px; border-radius: 10px; border-left: 3px solid var(--accent-emerald);">
               <strong>1. Buat Grup Baru</strong><br>
-              Pilih menu <em>Buat Grup Baru</em> di halaman utama. Masukkan nama instansi, nama grup, nama admin/penanggung jawab, dan PIN admin. Setelah disimpan, sistem akan memberikan <strong>KODE GRUP</strong> unik (Contoh: GRP-XXXX).
+              Pilih menu <em>Buat Grup Baru</em> di halaman utama. Masukkan nama instansi, nama grup, nama admin, dan PIN admin untuk mendapatkan <strong>KODE GRUP</strong>.
             </div>
 
             <div style="margin-bottom: 12px; background: rgba(6, 182, 212, 0.08); padding: 10px 12px; border-radius: 10px; border-left: 3px solid var(--accent-cyan);">
               <strong>2. Pendaftaran Anggota</strong><br>
-              Pilih menu <em>Daftar Anggota Baru</em>. Masukkan Kode Grup yang diberikan oleh Admin Grup, isi nama lengkap, ID anggota unik, PIN rahasia, serta target infaq pribadi Anda.
+              Pilih menu <em>Daftar Anggota Baru</em>. Masukkan Kode Grup dari Admin, isi nama lengkap, ID anggota unik, PIN, serta target infaq pribadi.
             </div>
 
             <div style="margin-bottom: 12px; background: rgba(99, 102, 241, 0.08); padding: 10px 12px; border-radius: 10px; border-left: 3px solid var(--accent-indigo);">
-              <strong>3. Cara Login & Cek Progress</strong><br>
-              • <strong>Login Anggota:</strong> Masukkan Kode Grup, ID, dan PIN untuk melihat riwayat infaq pribadi dan grafik pencapaian target.<br>
-              • <strong>Login Admin:</strong> Masukkan Kode Grup dan PIN Admin untuk dapat merekap data, menginput infaq, mengekspor laporan ke Excel, dan mengatur hak akses admin anggota.
-            </div>
-            <div style="margin-bottom: 12px; background: rgba(99, 102, 241, 0.08); padding: 10px 12px; border-radius: 10px; border-left: 3px solid var(--accent-indigo);">
-              <strong>Catatan Sistem:</strong> Grup dan data yang tidak memiliki aktivitas/pembaruan selama 1 tahun akan terhapus otomatis.
+              <strong>3. Login & Cek Progress</strong><br>
+              • <strong>Login Anggota:</strong> Cek riwayat infaq pribadi dan progress target.<br>
+              • <strong>Login Admin:</strong> Merekap data, input infaq, ekspor laporan Excel, dan manajemen akses admin anggota.
             </div>
           </div>
         `,
@@ -1207,7 +1068,6 @@
     document.getElementById('m-at-tanggal').value = todayStr;
 
     window.addEventListener('DOMContentLoaded', async () => {
-      startSplashScreen();
       runAutoCleanup();
 
       const savedMember = localStorage.getItem('infaq_member');
@@ -1401,10 +1261,7 @@
       infaqs.forEach(item => {
         if (!item.tanggal) return;
         const nominal = Number(item.nominal) || 0;
-        
-        if (item.tanggal === todayStr) {
-          totalToday += nominal;
-        }
+        if (item.tanggal === todayStr) totalToday += nominal;
 
         const tDate = new Date(item.tanggal);
         if (tDate.getFullYear() === currentYear) {
@@ -1525,9 +1382,7 @@
         .eq('tanggal', todayStr);
 
       let totalToday = 0;
-      if (todayGroupData) {
-        todayGroupData.forEach(item => totalToday += Number(item.nominal) || 0);
-      }
+      if (todayGroupData) todayGroupData.forEach(item => totalToday += Number(item.nominal) || 0);
       document.getElementById('dash-a-today').innerText = totalToday.toLocaleString('id-ID');
 
       const tbody = document.getElementById('dash-a-table');
@@ -1585,10 +1440,7 @@
       infaqs.forEach(item => {
         if (!item.tanggal) return;
         const nominal = Number(item.nominal) || 0;
-
-        if (item.tanggal === todayStr) {
-          totalToday += nominal;
-        }
+        if (item.tanggal === todayStr) totalToday += nominal;
 
         const tDate = new Date(item.tanggal);
         if (tDate.getFullYear() === currentYear) {
@@ -1803,9 +1655,7 @@
           const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
 
           const headerDays = ["No", "ID Anggota", "Nama Anggota"];
-          for (let d = 1; d <= daysInMonth; d++) {
-            headerDays.push(`Tgl ${d}`);
-          }
+          for (let d = 1; d <= daysInMonth; d++) headerDays.push(`Tgl ${d}`);
           headerDays.push("Total Bulan Ini", "Akumulasi s.d Bulan Ini");
 
           const sheetDataMonth = [
