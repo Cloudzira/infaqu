@@ -652,6 +652,23 @@
   @media (max-width: 480px) { .pwa-long { display: none; } }
   @media (display-mode: standalone) { #pwaInstall { display: none !important; } }
 </style>
+
+<style>
+  /* ---- Ikon baru (kotak infaq + koin) di header & splash ---- */
+  .brand-logo, [data-theme="feminine"] .brand-logo {
+    width: 84px; height: 84px; border-radius: 22%; filter: drop-shadow(0 8px 20px rgba(16,185,129,.35));
+  }
+  .brand-logo svg { border-radius: 22%; }
+  .hd-coin { animation: hdCoin 3.2s ease-in-out infinite; }
+  @keyframes hdCoin { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+  .sp-logo-wrap svg { border-radius: 22%; opacity: 0; transform: scale(.7); animation: spPop .8s .15s cubic-bezier(.2,.9,.25,1.2) forwards;
+    filter: drop-shadow(0 10px 30px rgba(16,185,129,.55)) drop-shadow(0 0 26px rgba(6,182,212,.35)); }
+  @keyframes spPop { to { opacity: 1; transform: scale(1); } }
+  @media (max-width: 420px) { .sp-sub { font-size: 10px; letter-spacing: .5px; } }
+  .sp-coin { animation: spCoin 2.4s 1s ease-in-out infinite; }
+  @keyframes spCoin { 0% { transform: translateY(-70px); opacity: 0; } 25% { opacity: 1; } 55%,100% { transform: translateY(0); opacity: 1; } }
+</style>
 </head>
 <body data-theme="default">
 
@@ -674,16 +691,33 @@
     <div class="sp-center">
       <div class="sp-logo-wrap">
         <div class="sp-orbit"></div><div class="sp-orbit o2"></div>
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <g class="ifq-hex-outer"><polygon class="sp-draw " pathLength="100" points="50,5 89,27.5 89,72.5 50,95 11,72.5 11,27.5" fill="rgba(2,6,23,.55)" stroke="url(#ifqGradSplash)" stroke-width="3" stroke-linejoin="round"/></g>
-        <polygon class="sp-fade ifq-ring" points="50,15 80,32.5 80,67.5 50,85 20,67.5 20,32.5" fill="none" stroke="url(#ifqGradSplash)" stroke-width="1" stroke-dasharray="3 5" opacity=".6"/>
-        <circle class="sp-fade " cx="50" cy="5" r="2.6" fill="url(#ifqGradSplash)"/><circle class="sp-fade " cx="89" cy="72.5" r="2.6" fill="url(#ifqGradSplash)"/><circle class="sp-fade " cx="11" cy="72.5" r="2.6" fill="url(#ifqGradSplash)"/>
-        <path class="sp-fade " d="M54 19 A10 10 0 1 0 54 35 A8 8 0 0 1 54 19 Z" fill="url(#ifqGradSplash)"/>
-        <circle class="sp-fade ifq-core" cx="62" cy="24" r="1.9" fill="#fff"/>
-        <path class="sp-draw " pathLength="100" d="M26 72 V65 H38 V58 A12 12 0 0 1 62 58 V65 H74 V72 Z" fill="url(#ifqGradSplash)" fill-opacity=".2" stroke="url(#ifqGradSplash)" stroke-width="2.4" stroke-linejoin="round"/>
-        <path class="sp-draw " pathLength="100" d="M28 65 V52 L30 44 L32 52 V65 M68 65 V52 L70 44 L72 52 V65 M50 46 V40 M45 72 V68 A5 5 0 0 1 55 68 V72" fill="none" stroke="url(#ifqGradSplash)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle class="sp-fade " cx="50" cy="39" r="1.8" fill="url(#ifqGradSplash)"/><circle class="sp-fade " cx="30" cy="43" r="1.6" fill="url(#ifqGradSplash)"/><circle class="sp-fade " cx="70" cy="43" r="1.6" fill="url(#ifqGradSplash)"/>
-        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+ <linearGradient id="sp-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10b981"/><stop offset=".55" stop-color="#059669"/><stop offset="1" stop-color="#0f766e"/></linearGradient>
+ <radialGradient id="sp-hl" cx=".3" cy=".15" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+ <linearGradient id="sp-box" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9e4ec"/></linearGradient>
+ <linearGradient id="sp-lid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef3f7"/></linearGradient>
+ <linearGradient id="sp-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fef08a"/><stop offset=".5" stop-color="#fbbf24"/><stop offset="1" stop-color="#d97706"/></linearGradient>
+</defs>
+<rect width="512" height="512" rx="112" fill="url(#sp-bg)"/>
+<rect width="512" height="512" rx="112" fill="url(#sp-hl)"/>
+<g transform="translate(256 256) scale(1.0) translate(-256 -256) translate(0 14)">
+  <ellipse cx="256" cy="440" rx="150" ry="14" fill="#022c22" opacity=".28"/>
+  <g class="sp-coin"><!-- koin -->
+  <circle cx="256" cy="124" r="60" fill="url(#sp-gold)" stroke="#b45309" stroke-width="7"/>
+  <circle cx="256" cy="124" r="42" fill="none" stroke="#b45309" stroke-width="4" opacity=".45"/>
+  <path d="M256 148 C232 130 236 104 249 104 C253 104 256 107 256 111 C256 107 259 104 263 104 C276 104 280 130 256 148Z" fill="#b45309" opacity=".6"/>
+  <path d="M222 96 A40 40 0 0 1 244 78" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+  <g stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".7"><path d="M232 196 V210"/><path d="M256 202 V220"/><path d="M280 196 V210"/></g>
+  </g>
+  <!-- kotak infaq -->
+  <rect x="136" y="246" width="240" height="180" rx="26" fill="url(#sp-box)"/>
+  <rect x="136" y="268" width="240" height="12" fill="#0f766e" opacity=".10"/>
+  <rect x="116" y="222" width="280" height="52" rx="22" fill="url(#sp-lid)"/>
+  <rect x="190" y="240" width="132" height="16" rx="8" fill="#064e3b"/>
+  <path d="M273.9 316 A34 34 0 1 0 273.9 368 A27 27 0 0 1 273.9 316Z" fill="#059669"/>
+  <circle cx="298" cy="336" r="6.5" fill="#059669"/>
+</g></svg>
       </div>
       <h1 class="sp-title"><span style="--i:0">I</span><span style="--i:1">N</span><span style="--i:2">F</span><span style="--i:3">A</span><span style="--i:4">Q</span><span style="--i:5">U</span></h1>
       <p class="sp-sub">Sistem Manajemen &amp; Transparansi Infaq Digital</p>
@@ -748,16 +782,33 @@
       </div>
 
       <div class="brand-logo">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo InfaQu - masjid dan bulan sabit">
-        <g class="ifq-hex-outer"><polygon pathLength="100" points="50,5 89,27.5 89,72.5 50,95 11,72.5 11,27.5" fill="rgba(2,6,23,.55)" stroke="url(#ifqGrad)" stroke-width="3" stroke-linejoin="round"/></g>
-        <polygon class="ifq-ring" points="50,15 80,32.5 80,67.5 50,85 20,67.5 20,32.5" fill="none" stroke="url(#ifqGrad)" stroke-width="1" stroke-dasharray="3 5" opacity=".6"/>
-        <circle cx="50" cy="5" r="2.6" fill="url(#ifqGrad)"/><circle cx="89" cy="72.5" r="2.6" fill="url(#ifqGrad)"/><circle cx="11" cy="72.5" r="2.6" fill="url(#ifqGrad)"/>
-        <path d="M54 19 A10 10 0 1 0 54 35 A8 8 0 0 1 54 19 Z" fill="url(#ifqGrad)"/>
-        <circle class="ifq-core" cx="62" cy="24" r="1.9" fill="#fff"/>
-        <path pathLength="100" d="M26 72 V65 H38 V58 A12 12 0 0 1 62 58 V65 H74 V72 Z" fill="url(#ifqGrad)" fill-opacity=".2" stroke="url(#ifqGrad)" stroke-width="2.4" stroke-linejoin="round"/>
-        <path pathLength="100" d="M28 65 V52 L30 44 L32 52 V65 M68 65 V52 L70 44 L72 52 V65 M50 46 V40 M45 72 V68 A5 5 0 0 1 55 68 V72" fill="none" stroke="url(#ifqGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="50" cy="39" r="1.8" fill="url(#ifqGrad)"/><circle cx="30" cy="43" r="1.6" fill="url(#ifqGrad)"/><circle cx="70" cy="43" r="1.6" fill="url(#ifqGrad)"/>
-        </svg>
+        <svg role="img" aria-label="Logo InfaQu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+ <linearGradient id="hd-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10b981"/><stop offset=".55" stop-color="#059669"/><stop offset="1" stop-color="#0f766e"/></linearGradient>
+ <radialGradient id="hd-hl" cx=".3" cy=".15" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+ <linearGradient id="hd-box" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9e4ec"/></linearGradient>
+ <linearGradient id="hd-lid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef3f7"/></linearGradient>
+ <linearGradient id="hd-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fef08a"/><stop offset=".5" stop-color="#fbbf24"/><stop offset="1" stop-color="#d97706"/></linearGradient>
+</defs>
+<rect width="512" height="512" rx="112" fill="url(#hd-bg)"/>
+<rect width="512" height="512" rx="112" fill="url(#hd-hl)"/>
+<g transform="translate(256 256) scale(1.0) translate(-256 -256) translate(0 14)">
+  <ellipse cx="256" cy="440" rx="150" ry="14" fill="#022c22" opacity=".28"/>
+  <g class="hd-coin"><!-- koin -->
+  <circle cx="256" cy="124" r="60" fill="url(#hd-gold)" stroke="#b45309" stroke-width="7"/>
+  <circle cx="256" cy="124" r="42" fill="none" stroke="#b45309" stroke-width="4" opacity=".45"/>
+  <path d="M256 148 C232 130 236 104 249 104 C253 104 256 107 256 111 C256 107 259 104 263 104 C276 104 280 130 256 148Z" fill="#b45309" opacity=".6"/>
+  <path d="M222 96 A40 40 0 0 1 244 78" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+  <g stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".7"><path d="M232 196 V210"/><path d="M256 202 V220"/><path d="M280 196 V210"/></g>
+  </g>
+  <!-- kotak infaq -->
+  <rect x="136" y="246" width="240" height="180" rx="26" fill="url(#hd-box)"/>
+  <rect x="136" y="268" width="240" height="12" fill="#0f766e" opacity=".10"/>
+  <rect x="116" y="222" width="280" height="52" rx="22" fill="url(#hd-lid)"/>
+  <rect x="190" y="240" width="132" height="16" rx="8" fill="#064e3b"/>
+  <path d="M273.9 316 A34 34 0 1 0 273.9 368 A27 27 0 0 1 273.9 316Z" fill="#059669"/>
+  <circle cx="298" cy="336" r="6.5" fill="#059669"/>
+</g></svg>
       </div>
       <h1 class="main-title">INFAQU</h1>
       <p class="main-subtitle">Sistem Manajemen & Transparansi Infaq Digital</p>
