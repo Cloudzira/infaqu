@@ -1,6 +1,6 @@
 /* Service Worker InfaQu - cache app shell agar bisa dibuka cepat & saat offline.
    Data Supabase TIDAK pernah di-cache (selalu online agar data infaq akurat). */
-const CACHE = 'infaqu-v1';
+const CACHE = 'infaqu-v2';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 const CDN_HOSTS = ['cdn.jsdelivr.net', 'unpkg.com', 'fonts.googleapis.com', 'fonts.gstatic.com', 'cdnjs.cloudflare.com'];
 
